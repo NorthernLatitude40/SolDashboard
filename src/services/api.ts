@@ -20,7 +20,7 @@ export async function fetchPools(): Promise<PoolDisplay[]> {
   // 提取对应字段
   const tableData: PoolDisplay[] = poolList.map((p: any) => ({
     amm_id: p.id,               // 这里用 id 对应 amm_id
-    lp_mint: p.rewardDefaultPoolInfos || "",  // 可能需要根据后端结构调整
+    lp_mint: p.lpMint.address ||"",  // 可能需要根据后端结构调整
     token_a_vault: p.mintA.address,
     token_b_vault: p.mintB.address,
     open_orders: p.openOrders || "",  // 如果有 openOrders 字段就用，没有就空
