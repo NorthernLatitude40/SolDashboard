@@ -1,11 +1,24 @@
 import React from "react";
-import PoolList from "./components/PoolList";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DashboardLayout from './components/DashboardLayout';
+import Home from './pages/Home';
+import PoolListPage from './pages/PoolListPage';
+import SerumListPage from './pages/SerumListPage';
+import SerumPoolListPage from './pages/SerumPoolListPage';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <PoolList />
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<DashboardLayout />}>
+        <Route index element={<Home />} />
+        <Route path="pools" element={<PoolListPage />} />
+        <Route path="serum" element={<SerumListPage />} />
+        <Route path="serum/:addr" element={<SerumPoolListPage />} />
+        <Route path="serum" element={<SerumListPage />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
   );
 };
 

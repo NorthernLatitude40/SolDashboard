@@ -2,10 +2,20 @@ import { type PoolInfo } from "../types/pool";
 
 export interface PoolDisplay {
   amm_id: string;
+  symbol_a: string;
+  symbol_b: string;
   lp_mint: string;
   token_a_vault: string;
   token_b_vault: string;
   open_orders: string;
+  open_time: string;
+  fdv: string;
+  tvl: string;
+  day_volume: string;
+  day_volume_quote: string;
+  price: string;
+  price_min: string;
+  price_max: string;
 }
 
 export async function fetchPools(): Promise<PoolDisplay[]> {
@@ -16,33 +26,72 @@ export async function fetchPools(): Promise<PoolDisplay[]> {
   const jsonData = await res.json();
   const transactionStr = jsonData.transaction;
   const transactionObj = JSON.parse(transactionStr);
+  console.log(transactionObj);
   const poolList: PoolInfo[] = transactionObj.data.data;
   // 提取对应字段
   const tableData: PoolDisplay[] = poolList.map((p: any) => ({
     amm_id: p.id,               // 这里用 id 对应 amm_id
+   
     lp_mint: p.lpMint.address ||"",  // 可能需要根据后端结构调整
     token_a_vault: p.mintA.address,
+    symbol_a: p.mintA.symbol || "",
     token_b_vault: p.mintB.address,
+    symbol_b: p.mintB.symbol || "",
     open_orders: p.openOrders || "",  // 如果有 openOrders 字段就用，没有就空
+    open_time: getPoolAge(p.openTime) || "",  
+    fdv: p.fdv || "",
+    tvl: formatUSD(p.tvl) || "",
+    day_volume: 0|| "",
+    day_volume_quote: formatUSD(p.day.volumeQuote) || "",
+    price: formatUSD(p.price) || "",
+    price_min: formatUSD(p.day.priceMin) || "",
+    price_max: formatUSD(p.day.priceMax) || "",
   }));
-  console.log(tableData);
   return tableData; 
 
-  // 目前先用 mock 数据
-  // return [
-  //   {
-  //     amm_id: "9zKjJk4S8cVQv1oB5f1nYFZCP1Qx4GJ1Qk3Dyjzvzp8",
-  //     lp_mint: "LpMint1234567890",
-  //     token_a_vault: "TokenAVaultABC123",
-  //     token_b_vault: "TokenBVaultXYZ789",
-  //     open_orders: "OpenOrders987654321",
-  //   },
-  //   {
-  //     amm_id: "6eT7a8S4Jc3k7S2Df9t6fXzFz9fC8e6K9a4b1",
-  //     lp_mint: "LpMint987654321",
-  //     token_a_vault: "TokenAVaultLMN456",
-  //     token_b_vault: "TokenBVaultOPQ012",
-  //     open_orders: "OpenOrders555555555",
-  //   },
-  // ];
+}
+
+function getPoolAge(openTime: number) {
+  // 如果 openTime 為 0、空字串或 undefined，返回空或提示
+  if (!openTime || openTime == 0) return "N/A";
+
+  // 假設 openTime 是 UNIX timestamp（秒）
+  const now = Date.now(); // 當前時間（毫秒）
+  const openDate = new Date(openTime * 1000); // 轉成毫秒
+  const diffMs = now - openDate.getTime(); // 毫秒差
+
+  // 如果開池時間晚於當前時間，返回空
+  if (diffMs < 0) return "N/A";
+
+  const diffH = diffMs / (1000 * 60 * 60); // 小時
+  if (diffH < 24) return diffH.toFixed(1) + "h";
+
+  const diffD = diffH / 24; // 天
+  if (diffD < 30) return diffD.toFixed(1) + "d";
+
+  const diffMo = diffD / 30; // 月（按 30 天計算）
+  if (diffMo < 12) return diffMo.toFixed(1) + "mo";
+
+  const diffY = diffMo / 12; // 年
+  return diffY.toFixed(2) + "y";
+}
+
+
+function formatUSD(value: number | null | undefined) {
+  if (value === null || value === undefined) return "$0";
+
+  const absValue = Math.abs(value);
+  let formatted = "";
+
+  if (absValue >= 1e9) {
+      formatted = (value / 1e9).toFixed(2) + "B";
+  } else if (absValue >= 1e6) {
+      formatted = (value / 1e6).toFixed(2) + "M";
+  } else if (absValue >= 1e3) {
+      formatted = (value / 1e3).toFixed(2) + "K";
+  } else {
+      formatted = value.toFixed(2);
+  }
+
+  return "$" + formatted;
 }

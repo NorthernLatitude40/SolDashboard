@@ -32,9 +32,19 @@ const PoolList: React.FC = () => {
         <thead>
           <tr className="bg-indigo-100 text-gray-600 text-sm">
             <th className="py-3 px-4 text-left">AMM ID</th>
+            <th className="py-3 px-4 text-left">Age</th>
+            <th className="py-3 px-4 text-left">FDV</th>
+            <th className="py-3 px-4 text-left">Liq</th>
+            <th className="py-3 px-4 text-left">24h Txns</th>
+            <th className="py-3 px-4 text-left">24h Vol</th>
+            <th className="py-3 px-4 text-left">Price USD</th>
+            <th className="py-3 px-4 text-left">priceMin%</th>
+            <th className="py-3 px-4 text-left">priceMax%</th>
             <th className="py-3 px-4 text-left">LP Mint</th>
             <th className="py-3 px-4 text-left">Token A Vault</th>
+            <th className="py-3 px-4 text-left">Symbol A</th>
             <th className="py-3 px-4 text-left">Token B Vault</th>
+            <th className="py-3 px-4 text-left">Symbol B</th>
             <th className="py-3 px-4 text-left">Open Orders</th>
           </tr>
         </thead>
@@ -42,9 +52,19 @@ const PoolList: React.FC = () => {
           {pools.map((p, i) => (
             <tr key={i} className="border-t hover:bg-gray-50 transition">
               <td className="py-2 px-4 font-mono text-xs">{p.amm_id}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.open_time}</td>
+              <td className="py-2 px-4 font-mono text-xs">FDV = Token Price × Total Supply</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.tvl}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.day_volume}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.day_volume_quote}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.price}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.price_min}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.price_max}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.lp_mint}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.token_a_vault}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.symbol_a}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.token_b_vault}</td>
+              <td className="py-2 px-4 font-mono text-xs">{p.symbol_b}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.open_orders}</td>
             </tr>
           ))}

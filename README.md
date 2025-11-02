@@ -71,3 +71,24 @@ export default defineConfig([
   },
 ])
 ```
+
+.						--------SolDashboard
+├── README.md
+├── eslint.config.js
+├── index.html          --------應用入口 HTML 
+├── package-lock.json
+├── package.json		--------依賴配置
+├── public
+├── src
+│   ├── App.css
+│   ├── App.tsx			--------主應用組件
+│   ├── assets
+│   ├── components		--------UI 組件
+│   ├── index.css       --------全局樣式
+│   ├── main.tsx        --------應用入口
+│   ├── services		--------接口調用層
+│   └── types			--------對象類型定義
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
