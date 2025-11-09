@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import PoolListPage from './pages/PoolListPage';
 import SerumListPage from './pages/SerumListPage';
 import SerumPoolListPage from './pages/SerumPoolListPage';
+import SerumPoolDetailPage from './pages/SerumPoolDetailPage';
 
 const App: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const App: React.FC = () => {
         <Route path="pools" element={<PoolListPage />} />
         <Route path="serum" element={<SerumListPage />} />
         <Route path="serum/:addr" element={<SerumPoolListPage />} />
-        <Route path="serum" element={<SerumListPage />} />
+        <Route path="serum/pool/:addr" element={<SerumPoolDetailPage />} />
       </Route>
     </Routes>
   </BrowserRouter>

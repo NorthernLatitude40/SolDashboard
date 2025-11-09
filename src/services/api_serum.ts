@@ -75,6 +75,35 @@ export async function fetchPoolListByAddr(addr: string): Promise<PoolDisplay[]> 
   return tableData; 
 }
 
+export async function fetchPoolDetailByAddr(addr: string): Promise<PoolDisplay[]>  {
+
+  const res = await fetch("http://127.0.0.1:8080/api/pool_ids", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ids: [addr], // 傳入一個或多個 ID
+    }),
+  });
+  const jsonData = await res.json();
+  const transactionStr = jsonData.transaction;
+  const transactionObj = JSON.parse(transactionStr);
+  console.log(transactionObj);
+  const poolList: PoolInfo[] = transactionObj.data;
+  // 提取对应字段
+  const tableData: PoolDisplay[] = poolList.map((p: any) => {       // 这里用 id 对应 amm_id
+    console.log("當前 pp:", p);  // ← 打印每個元素
+    return {
+     total_value: p.tvl+p.rewardDefaultInfos[0].perSecond*86400*1.37,
+      token_bal: format(Number(p.mintAmountA))+" "+"$"+format(Number(p.mintAmountA*p.price))+"\n"+format(Number(p.mintAmountB))+" "+"$"+format(Number(p.mintAmountB*p.price))|| "",
+      _24h_vol: "$"+Number(p.day.volumeQuote).toFixed(2)|| "",
+      tvl: "$"+p.tvl,
+     
+    };
+  });
+  return tableData; 
+}
 
 
 function getPoolAge(openTime: number) {

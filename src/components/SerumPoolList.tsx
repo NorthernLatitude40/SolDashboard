@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPoolListByAddr } from "../services/api_serum";
+import { useNavigate } from "react-router-dom";
 
 const PoolListPage: React.FC = () => {
   const { addr } = useParams<{ addr: string }>();
   const [pools, setPools] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
+  
+  const navigate = useNavigate();
+  const handleAddrClick = (addr: string) => {
+    // 跳轉到新頁面，帶上地址參數
+    navigate(`/serum/pool/${addr}`);
+  };
   useEffect(() => {
     const load = async () => {
       if (!addr) return;
@@ -50,7 +56,16 @@ const PoolListPage: React.FC = () => {
               <td className="py-2 px-4 font-mono text-xs">{p.amount}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.value}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.age}</td>
-              <td className="py-2 px-4 font-mono text-xs">{p.addr}</td>
+              <td className="py-2 px-4 font-mono text-xs">            <a
+                  className="text-blue-600 underline hover:text-blue-800 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault(); // 防止跳轉 # 
+                    handleAddrClick(p.addr);
+                  }}
+                  href="#"
+                >
+                  {p.addr}
+                </a></td>
             </tr>
           ))}
         </tbody>
