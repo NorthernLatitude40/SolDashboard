@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPoolDetailByAddr } from "../services/api_serum";
+import { useNavigate } from "react-router-dom";
 
-const PoolListPage: React.FC = () => {
+const SerumPoolDetailPage: React.FC = () => {
   const { addr } = useParams<{ addr: string }>();
   const [pools, setPools] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+  const handleAddrClick = (addr: string) => {
+    // 跳轉到新頁面，帶上地址參數
+    navigate(`/serum/pool/account/${addr}`);
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -41,6 +48,7 @@ const PoolListPage: React.FC = () => {
             <th className="py-3 px-4 text-left">Token Balance</th>
             <th className="py-3 px-4 text-left">TVL</th>
             <th className="py-3 px-4 text-left">Volume 24h</th>
+            <th className="py-3 px-4 text-left">lpMint address</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +59,18 @@ const PoolListPage: React.FC = () => {
               <td className="py-2 px-4 font-mono text-xs">{p.token_bal}</td>
               <td className="py-2 px-4 font-mono text-xs">{p.tvl}</td>
               <td className="py-2 px-4 font-mono text-xs">{p._24h_vol}</td>
-
+              <td className="py-2 px-4 font-mono text-xs">
+                <a
+                  className="text-blue-600 underline hover:text-blue-800 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault(); // 防止跳轉 # 
+                    handleAddrClick(p.lpMint_addr);
+                  }}
+                  href="#"
+                >
+                 {p.lpMint_addr}
+                </a>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -92,4 +111,4 @@ const PoolListPage: React.FC = () => {
   );
 };
 
-export default PoolListPage;
+export default SerumPoolDetailPage;

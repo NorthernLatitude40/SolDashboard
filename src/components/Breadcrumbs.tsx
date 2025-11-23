@@ -6,6 +6,7 @@ const routeNameMap: Record<string, string> = {
   "/": "Home",
   "/pools": "Pool List",
   "/serum": "Serum List",
+  "/accounts": "Account List",
 };
 
 const Breadcrumbs: React.FC = () => {

@@ -1,4 +1,5 @@
 import { type PoolInfo } from "../types/pool";
+import { type AccountInfo } from "../types/account";
 
 export interface PoolDisplay {
   amm_id: string;
@@ -94,4 +95,41 @@ function formatUSD(value: number | null | undefined) {
   }
 
   return "$" + formatted;
+}
+
+export interface AccountDisplay {
+  address: string;
+  uiAmount: number;
+  decimals: number;
+  amount: string;
+  uiAmountString: string;
+
+
+}
+
+export async function fetchPlmintAccounts(addr: string): Promise<AccountDisplay[]> {
+  const res = await fetch(`http://127.0.0.1:8080/api/plmint_accounts?addr=${addr}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const jsonData = await res.json();
+  const transactionStr = jsonData.transaction;
+  const transactionObj = JSON.parse(transactionStr);
+  console.log(transactionObj);
+  const accoountList: AccountInfo[] = transactionObj.result.value;
+  console.log("當前 pp:", accoountList);  // ← 打印每個元素
+  // 提取对应字段
+  const tableData: AccountDisplay[] = accoountList.map((p: any) => {       // 这里用 id 对应 amm_id
+
+    return {
+      address: p.address,
+      uiAmount: p.uiAmount,
+      decimals: p.decimals,
+      amount: p.amount,
+      uiAmountString: p.uiAmountString,
+    };
+  });
+  return tableData; 
 }

@@ -6,6 +6,7 @@ import PoolListPage from './pages/PoolListPage';
 import SerumListPage from './pages/SerumListPage';
 import SerumPoolListPage from './pages/SerumPoolListPage';
 import SerumPoolDetailPage from './pages/SerumPoolDetailPage';
+import PlmintAccountListPage from './pages/PlmintAccountListPage';
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <Route path="serum" element={<SerumListPage />} />
         <Route path="serum/:addr" element={<SerumPoolListPage />} />
         <Route path="serum/pool/:addr" element={<SerumPoolDetailPage />} />
+        <Route path="/serum/pool/account/:addr" element={<PlmintAccountListPage />} />
       </Route>
     </Routes>
   </BrowserRouter>

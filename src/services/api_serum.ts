@@ -69,7 +69,6 @@ export async function fetchPoolListByAddr(addr: string): Promise<PoolDisplay[]> 
       age: getPoolAge(Number(p.pubAt)) || "",  
       addr: p.addr || "",  
       value: "$"+format(Number(p.t0.liqUsd))+" "+p.t0.sym+"\n"+"$"+format(Number(p.t1.liqUsd))+" "+p.t1.sym|| "",
-      
     };
   });
   return tableData; 
@@ -99,7 +98,7 @@ export async function fetchPoolDetailByAddr(addr: string): Promise<PoolDisplay[]
       token_bal: format(Number(p.mintAmountA))+" "+"$"+format(Number(p.mintAmountA*p.price))+"\n"+format(Number(p.mintAmountB))+" "+"$"+format(Number(p.mintAmountB*p.price))|| "",
       _24h_vol: "$"+Number(p.day.volumeQuote).toFixed(2)|| "",
       tvl: "$"+p.tvl,
-     
+      lpMint_addr: p.lpMint.address,
     };
   });
   return tableData; 
